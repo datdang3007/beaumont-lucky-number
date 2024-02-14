@@ -1,21 +1,37 @@
-import { Button, Grid, Typography, styled } from "@mui/material";
-import { BackGround, Name } from "../../components";
+import { Box, Button, Grid, Typography, styled } from "@mui/material";
+import { BackGround, ListLuckyNumber, Name } from "../../components";
 import { ColorPalette } from "../../constants";
 import { useMainLuckyNumberContext } from "../../providers";
 
 export const MainLuckyNumber = () => {
-  const { isRunning, luckyNumber, onClickButtonStart } =
-    useMainLuckyNumberContext();
+  const {
+    isMaximum,
+    isRunning,
+    luckyNumber,
+    listLuckyNumber,
+    onClickButtonStart,
+    onClickButtonReset,
+  } = useMainLuckyNumberContext();
 
   return (
     <BackGround>
       <Name />
+      <ListLuckyNumber list={listLuckyNumber} />
       <NumberContainer>
         <NumberTypography>{luckyNumber}</NumberTypography>
       </NumberContainer>
-      <ButtonStart onClick={onClickButtonStart}>
-        {isRunning ? "Dừng" : "Bắt Đầu"}
-      </ButtonStart>
+      <GroupButton>
+        <ButtonStart
+          onClick={onClickButtonStart}
+          sx={{
+            cursor: isMaximum ? "not-allowed" : undefined,
+            opacity: isMaximum ? 0.6 : undefined,
+          }}
+        >
+          {isRunning ? "Dừng" : "Bắt Đầu"}
+        </ButtonStart>
+        <ButtonReset onClick={onClickButtonReset}>Reset</ButtonReset>
+      </GroupButton>
     </BackGround>
   );
 };
@@ -33,14 +49,27 @@ const NumberTypography = styled(Typography)({
   fontSize: "120px",
 });
 
-const ButtonStart = styled(Button)({
+const GroupButton = styled(Box)({
   position: "absolute",
+  display: "flex",
   left: "50%",
   bottom: "100px",
+  columnGap: "12px",
+  transform: "translateX(-50%)",
+});
+
+const ButtonReset = styled(Button)({
   width: "200px",
   fontSize: "20px",
   borderRadius: "8px",
   color: ColorPalette.White,
-  transform: "translateX(-50%)",
+  background: `${ColorPalette.Black} !important`,
+});
+
+const ButtonStart = styled(Button)({
+  width: "200px",
+  fontSize: "20px",
+  borderRadius: "8px",
+  color: ColorPalette.White,
   background: `${ColorPalette.Black} !important`,
 });
